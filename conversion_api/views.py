@@ -24,7 +24,7 @@ def excel(location):
         for i in range(nwb):
             x = {wb[i]: w[wb[i]]}
             n.append(x)
-        n = json.dumps(str(n))
+        n = json.dumps(n, indent=4)
 
         return JsonResponse(n, safe=False)
 
