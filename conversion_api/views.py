@@ -15,22 +15,24 @@ from rest_framework.parsers import MultiPartParser, FileUploadParser
 
 
 @api_view(["POST"])
-@parser_classes([MultiPartParser])
+@parser_classes([FileUploadParser])
 def excel(location):
     try:
-        conv = location.data
+        conv = location.data['file']
         # conv =
         #w = pd.read_excel(conv['numbr'])
         w = pd.read_excel(conv)
         wb = w.columns
-        nwb = len(wb)
-        n = []
-        for i in range(nwb):
-            x = {wb[i]: w[wb[i]]}
-            n.append(x)
-            n = json.dumps(n, indent=4)
+        n = {}
+        y = {}
 
-        return JsonResponse(location, safe=False)
+        for i in range(len(w[wb[1]])):
+            for j in wb:
+                y[j] = str(w[j][i])
+            n[i] = y
+        n = json.dumps(n, skipkeys=True, ensure_ascii=False, indent=4)
+
+        return JsonResponse(n, safe=False)
 
     except ValueError as e:
         return Response(e.args[0], status.HTTP_400_BAD_REQUEST)
