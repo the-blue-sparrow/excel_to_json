@@ -15,13 +15,13 @@ from rest_framework.parsers import MultiPartParser, FileUploadParser
 
 
 @api_view(["POST"])
-@parser_classes([FileUploadParser])
+# @parser_classes([FileUploadParser])
 def excel(location):
     try:
-        conv = location.data['file']
+        conv = json.loads(location.body)
         # conv =
-        #w = pd.read_excel(conv['numbr'])
-        w = pd.read_excel(conv)
+        w = pd.read_excel(conv['token'])
+#        w = pd.read_excel(conv)
         wb = w.columns
         n = {}
         y = {}
@@ -30,6 +30,7 @@ def excel(location):
             for j in wb:
                 y[j] = str(w[j][i])
             n[i] = y
+            y={}
         n = json.dumps(n, skipkeys=True, ensure_ascii=False, indent=4)
 
         return JsonResponse(n, safe=False)
